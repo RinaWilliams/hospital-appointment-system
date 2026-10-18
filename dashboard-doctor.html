@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard — Hospital Appointment System</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a5 5 0 0 0 10 0V3"/><path d="M2 3h3M13 3h3"/><path d="M9 13v2a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="11" r="2.5"/></svg>
+      </span>
+      Hospital Appointment System
+    </div>
+    <div class="topbar-user">
+      <span id="welcomeMsg"></span>
+      <a href="#" onclick="logout()" class="topbar-signout">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+        Sign out
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <a href="#" class="tab active" data-tab="requests"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>Requests</a>
+      <a href="#" class="tab" data-tab="upcoming"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>Upcoming</a>
+      <a href="#" class="tab" data-tab="availability"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Availability</a>
+      <a href="#" class="tab" data-tab="prescribe"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Prescriptions &amp; labs</a>
+      <a href="#" class="tab" data-tab="records"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>Patient notes</a>
+      <a href="#" class="tab" data-tab="profile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+    </div>
+
+    <div class="tab-panel active" id="panel-requests">
+      <div class="muted" style="margin-bottom:12px;font-size:13px;">Paid bookings awaiting your approval.</div>
+      <div class="grid-cards" id="requestsList"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-upcoming">
+      <div class="muted" style="margin-bottom:12px;font-size:13px;">Approved appointments — mark complete once the visit happens.</div>
+      <div class="grid-cards" id="upcomingList"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-availability">
+
+      
+      <div class="card" style="max-width:520px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </span><h2>Booking availability</h2></div>
+        <p class="muted" style="font-size:13px;margin-top:0;">Turn this ON when you want patients to see and book you. Turn it OFF when you are away — patients will not be able to book.</p>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;">
+          <input type="checkbox" id="availabilityToggle" onchange="toggleAvailability()" style="width:auto;transform:scale(1.3);">
+          <span>Accept bookings</span>
+        </label>
+        <div id="availabilityStatus" style="margin-top:10px;"></div>
+        <label class="field" style="margin-top:12px;">
+          <span class="field-label">Optional note shown to patients (e.g. "Back on Monday")</span>
+          <input type="text" id="availabilityNote" placeholder="e.g. On leave, returning next week">
+        </label>
+        <button class="btn btn-ghost" onclick="saveAvailabilityNote()" type="button">Save note</button>
+      </div>
+     
+      
+
+      <div class="card" style="max-width:520px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span><h2>Add a weekly slot</h2></div>
+        <form id="scheduleForm">
+          <label class="field">
+            <span class="field-label">Day</span>
+            <select id="dayOfWeek">
+              <option value="0">Sunday</option><option value="1" selected>Monday</option><option value="2">Tuesday</option>
+              <option value="3">Wednesday</option><option value="4">Thursday</option><option value="5">Friday</option><option value="6">Saturday</option>
+            </select>
+          </label>
+          <div style="display:flex;gap:12px;">
+            <label class="field" style="flex:1;"><span class="field-label">Start time</span><input type="time" id="startTime" required></label>
+            <label class="field" style="flex:1;"><span class="field-label">End time</span><input type="time" id="endTime" required></label>
+          </div>
+          <div class="error-text" id="scheduleError" style="display:none;"></div>
+          <button class="btn" type="submit">Add slot</button>
+        </form>
+      </div>
+      <div class="grid-cards" id="scheduleList"></div>
+
+      <div class="card" style="max-width:520px;margin:20px 0 16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9.5 15.5 5-5m0 5-5-5"/></svg></span><h2>Time off / unavailable dates</h2></div>
+        <form id="timeOffForm">
+          <label class="field"><span class="field-label">Date</span><input type="date" id="timeOffDate" required></label>
+          <div style="display:flex;gap:12px;">
+            <label class="field" style="flex:1;"><span class="field-label">Start (optional)</span><input type="time" id="timeOffStart"></label>
+            <label class="field" style="flex:1;"><span class="field-label">End (optional)</span><input type="time" id="timeOffEnd"></label>
+          </div>
+          <div class="muted" style="font-size:12px;margin:-8px 0 12px;">Leave start/end blank to block the whole day.</div>
+          <label class="field"><span class="field-label">Reason (optional)</span><input type="text" id="timeOffReason"></label>
+          <div class="error-text" id="timeOffError" style="display:none;"></div>
+          <button class="btn" type="submit">Add time off</button>
+        </form>
+      </div>
+      <div class="grid-cards" id="timeOffList"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-prescribe">
+      <div class="card" style="max-width:560px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></span><h2>Issue a prescription</h2></div>
+        <form id="prescForm">
+          <label class="field"><span class="field-label">Patient user ID</span><input type="number" id="patientId" required placeholder="See Requests/Upcoming for patient IDs" oninput="document.getElementById('labPatientId').value=this.value; loadPatientPrescriptionsAndLabs();"></label>
+          <label class="field"><span class="field-label">Medication</span><input type="text" id="medication" required autocomplete="off"></label>
+          <!-- Hidden field set by the drug autocomplete (correction xiv) -->
+          <input type="hidden" id="drugId">
+          <div style="display:flex;gap:12px;">
+            <label class="field" style="flex:1;"><span class="field-label">Dosage</span><input type="text" id="dosage" required placeholder="e.g. 500mg twice daily"></label>
+            <label class="field" style="flex:1;"><span class="field-label">Quantity</span><input type="number" id="quantity"></label>
+          </div>
+          <label class="field"><span class="field-label">Instructions</span><input type="text" id="instructions" placeholder="e.g. Take after meals"></label>
+          <div id="prescMessage"></div>
+          <button class="btn" type="submit">Issue prescription</button>
+        </form>
+      </div>
+
+      <div class="card" style="max-width:560px;margin-bottom:16px;">
+        <h2 style="font-size:18px;margin-top:0;">Order a lab test</h2>
+        <form id="labForm">
+          <label class="field"><span class="field-label">Patient user ID</span><input type="number" id="labPatientId" required oninput="document.getElementById('patientId').value=this.value; loadPatientPrescriptionsAndLabs();"></label>
+          <label class="field"><span class="field-label">Test name</span><input type="text" id="testName" required placeholder="e.g. Full Blood Count"></label>
+          <label class="field"><span class="field-label">Notes</span><input type="text" id="labNotes"></label>
+          <div id="labMessage"></div>
+          <button class="btn" type="submit">Order test</button>
+        </form>
+      </div>
+
+      <h3 style="font-size:15px;">This patient's prescriptions &amp; labs</h3>
+      <div class="grid-cards" id="patientPrescriptionsAndLabs"><div class="card muted">Enter a patient user ID above to see their history here.</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-records">
+      <div class="card" style="max-width:560px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg></span><h2>Add a patient note</h2></div>
+        <form id="recordForm">
+          <label class="field"><span class="field-label">Patient user ID</span><input type="number" id="recordPatientId" required oninput="loadPatientRecords()"></label>
+          <label class="field"><span class="field-label">Notes</span><textarea id="notes" style="min-height:90px;" required></textarea></label>
+          <div id="recordMessage"></div>
+          <button class="btn" type="submit">Save note</button>
+        </form>
+      </div>
+
+      <h3 style="font-size:15px;">This patient's notes</h3>
+      <div class="grid-cards" id="patientRecordsList"><div class="card muted">Enter a patient user ID above to see their notes here.</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-profile">
+      <div class="card" style="max-width:480px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><h2>My profile</h2></div>
+        <form id="profileForm">
+          <label class="field"><span class="field-label">Full name</span><input type="text" id="profileName" required></label>
+          <label class="field"><span class="field-label">Phone</span><input type="tel" id="profilePhone" maxlength="11" inputmode="numeric" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)"></label>
+          <label class="field"><span class="field-label">Bio</span><textarea id="profileBio" style="min-height:80px;"></textarea></label>
+          <div style="display:flex;gap:12px;">
+            <label class="field" style="flex:1;"><span class="field-label">Consultation fee (₦)</span><input type="number" id="profileFee" step="0.01"></label>
+            <label class="field" style="flex:1;"><span class="field-label">Slot length (minutes)</span><input type="number" id="profileSlotDuration"></label>
+          </div>
+          <label class="field"><span class="field-label">Facility</span><select id="profileFacility"><option value="">-</option></select></label>
+          <div id="profileMessage"></div>
+          <button class="btn" type="submit">Save changes</button>
+        </form>
+      </div>
+
+      <div class="card" style="max-width:680px;margin-top:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><h2>Phone reminders</h2></div>
+        <div id="calendarSyncMount"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/calendar-sync.js"></script>
+  <script src="../js/doctor.js"></script>
+</body>
+</html>

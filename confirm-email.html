@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Confirm email — Hospital Appointment System</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="auth-shell"><div class="auth-card" style="max-width:460px;text-align:center;">
+    <div class="auth-brand" style="justify-content:center;"><span class="icon-chip">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a5 5 0 0 0 10 0V3"/><path d="M2 3h3M13 3h3"/><path d="M9 13v2a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="11" r="2.5"/></svg>
+    </span> Hospital Appointment System</div>
+    <h2 id="title">Confirming your email…</h2>
+    <div class="muted" id="msg">Please wait.</div>
+    <div style="margin-top:20px;"><a href="../index.html" class="btn" style="text-decoration:none;">Go to sign in</a></div>
+  </div></div>
+  <script src="../js/api.js"></script>
+  <script>
+    (async () => {
+      const token = new URLSearchParams(location.search).get('token');
+      const title = document.getElementById('title');
+      const msg = document.getElementById('msg');
+      if (!token) { title.textContent = 'Missing token'; msg.textContent = 'This link is incomplete.'; return; }
+      try {
+        await apiRequest('/auth/confirm-email', { method: 'POST', auth: false, body: { token } });
+        title.textContent = '✓ Email confirmed';
+        msg.textContent = 'Your account is now fully active. You can sign in.';
+      } catch (err) {
+        title.textContent = 'Confirmation failed';
+        msg.textContent = err.message || 'This link is invalid or already used.';
+      }
+    })();
+  </script>
+</body>
+</html>

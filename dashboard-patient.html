@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Dashboard — Hospital Appointment System</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a5 5 0 0 0 10 0V3"/><path d="M2 3h3M13 3h3"/><path d="M9 13v2a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="11" r="2.5"/></svg>
+      </span>
+      Hospital Appointment System
+    </div>
+    <div class="topbar-user">
+      <span id="welcomeMsg"></span>
+      <a href="#" onclick="logout()" class="topbar-signout">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+        Sign out
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <a href="#" class="tab active" data-tab="find"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Find a doctor</a>
+      <a href="#" class="tab" data-tab="mine"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>My appointments</a>
+      <a href="#" class="tab" data-tab="records"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>Records</a>
+      <a href="#" class="tab" data-tab="complaints"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-4.9-1.5L3 21l1.6-4.1a8.38 8.38 0 0 1-1.1-4.4 8.5 8.5 0 0 1 9-8.4 8.48 8.48 0 0 1 8.5 8v.4Z"/></svg>Complaints</a>
+      <a href="#" class="tab" data-tab="reminders"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Reminders</a>
+      <a href="#" class="tab" data-tab="profile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+    </div>
+
+    <div class="tab-panel active" id="panel-find">
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+          <label class="field" style="flex:1;min-width:180px;margin-bottom:0;">
+            <span class="field-label">Specialty</span>
+            <select id="filterSpecialty"><option value="">All specialties</option></select>
+          </label>
+          <label class="field" style="flex:1;min-width:180px;margin-bottom:0;">
+            <span class="field-label">Facility</span>
+            <select id="filterFacility"><option value="">All facilities</option></select>
+          </label>
+          <button class="btn" onclick="searchDoctors()">Search</button>
+        </div>
+      </div>
+      <div class="grid-cards" id="doctorResults"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-mine">
+      <div class="tabs" style="margin-bottom:14px;">
+        <a href="#" class="subtab active" data-subtab="upcoming">Upcoming</a>
+        <a href="#" class="subtab" data-subtab="history">History</a>
+      </div>
+      <div class="grid-cards" id="myAppointments"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-records">
+      <div class="tabs" style="margin-bottom:14px;">
+        <a href="#" class="subtab-record active" data-record="prescriptions">Prescriptions</a>
+        <a href="#" class="subtab-record" data-record="labs">Lab results</a>
+      </div>
+      <div class="grid-cards" id="recordsList"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-complaints">
+      <div class="card" style="max-width:520px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-4.9-1.5L3 21l1.6-4.1a8.38 8.38 0 0 1-1.1-4.4 8.5 8.5 0 0 1 9-8.4 8.48 8.48 0 0 1 8.5 8v.4Z"/></svg></span><h2>Submit a complaint</h2></div>
+        <form id="complaintForm">
+          <label class="field">
+            <span class="field-label">Subject</span>
+            <input type="text" id="complaintSubject" required>
+          </label>
+
+          
+          <label class="field">
+            <span class="field-label">Which doctor is this about? (optional)</span>
+            <select id="complaintDoctor">
+              <option value="">Not about a specific doctor</option>
+            </select>
+          </label>
+          
+
+          <label class="field">
+            <span class="field-label">Message</span>
+            <textarea id="complaintMessage" style="min-height:90px;" required placeholder="Tell us what happened…"></textarea>
+          </label>
+          <div class="error-text" id="complaintError" style="display:none;"></div>
+          <button class="btn" type="submit">Submit complaint</button>
+        </form>
+      </div>
+      <div class="grid-cards" id="complaintsList"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-reminders">
+      <div class="card" style="max-width:680px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><h2>Phone reminders</h2></div>
+        <div id="calendarSyncMount"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-profile">
+      <div class="card" style="max-width:480px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><h2>My profile</h2></div>
+        <form id="profileForm">
+          <label class="field">
+            <span class="field-label">Full name</span>
+            <input type="text" id="profileName" required>
+          </label>
+          <label class="field">
+            <span class="field-label">Email (contact clinic to change)</span>
+            <input type="email" id="profileEmail" disabled>
+          </label>
+          <label class="field">
+            <span class="field-label">Phone</span>
+            <input type="tel" id="profilePhone" maxlength="11" inputmode="numeric" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)">
+          </label>
+          <label class="field">
+            <span class="field-label">Medical history</span>
+            <textarea id="profileMedicalHistory" style="min-height:100px;" placeholder="Allergies, ongoing conditions, current medication…"></textarea>
+          </label>
+          <div id="profileMessage"></div>
+          <button class="btn" type="submit">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/calendar-sync.js"></script>
+  <script src="../js/patient.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Hospital Appointment System</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v5a5 5 0 0 0 10 0V3"/><path d="M2 3h3M13 3h3"/><path d="M9 13v2a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="11" r="2.5"/></svg>
+      </span>
+      Hospital Appointment System
+    </div>
+    <div class="topbar-user">
+      <span id="welcomeMsg"></span>
+      <a href="#" onclick="logout()" class="topbar-signout">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+        Sign out
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="tabs">
+      <a href="#" class="tab active" data-tab="reports"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>Reports</a>
+      <a href="#" class="tab" data-tab="users"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Users</a>
+      <a href="#" class="tab" data-tab="facilities"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"/></svg>Facilities</a>
+      <a href="#" class="tab" data-tab="drugs"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Drug formulary</a>
+      <a href="#" class="tab" data-tab="appointments"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Appointments</a>
+      <a href="#" class="tab" data-tab="complaints"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-4.9-1.5L3 21l1.6-4.1a8.38 8.38 0 0 1-1.1-4.4 8.5 8.5 0 0 1 9-8.4 8.48 8.48 0 0 1 8.5 8v.4Z"/></svg>Complaints</a>
+      <a href="#" class="tab" data-tab="payments"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" x2="23" y1="10" y2="10"/></svg>Payments</a>
+    </div>
+
+    <div class="tab-panel active" id="panel-reports">
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;gap:28px;flex-wrap:wrap;" id="quickStats"></div>
+      </div>
+      <div class="stat-row">
+        <div class="card" style="flex:1;min-width:150px;">
+          <span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+          <div><div class="stat-value" id="statTotal">-</div><div class="stat-label">Total appointments</div></div>
+        </div>
+        <div class="card" style="flex:1;min-width:150px;">
+          <span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+          <div><div class="stat-value" id="statRevenue">-</div><div class="stat-label">Revenue collected</div></div>
+        </div>
+        <div class="card" style="flex:1;min-width:150px;">
+          <span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <div><div class="stat-value" id="statPaid">-</div><div class="stat-label">Successful payments</div></div>
+        </div>
+        <div class="card" style="flex:1;min-width:150px;">
+          <span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/><line x1="9" x2="15" y1="9" y2="15"/></svg></span>
+          <div><div class="stat-value" id="statFailed">-</div><div class="stat-label">Failed payments</div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px;">
+        <h3 style="margin-top:0;">Appointments by status</h3>
+        <div class="bar-chart" id="statusChart"></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;">Appointments by doctor</h3>
+        <div class="bar-chart" id="doctorChart"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-users">
+      <div class="card" style="max-width:560px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></span><h2>Create staff account</h2></div>
+        <form id="createUserForm">
+          <label class="field"><span class="field-label">Full name</span><input type="text" id="newFullName" required></label>
+          <label class="field"><span class="field-label">Email</span><input type="email" id="newEmail" required></label>
+          <label class="field"><span class="field-label">Password</span><input type="password" id="newPassword" required minlength="6"></label>
+
+          
+          <label class="field">
+            <span class="field-label">Phone (11 digits, optional)</span>
+            <input type="tel" id="newPhone" maxlength="11" inputmode="numeric" pattern="[0-9]{11}"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)">
+          </label>
+          
+
+          <label class="field"><span class="field-label">Role</span>
+            <select id="newRole" onchange="toggleDoctorFields()">
+              <option value="Doctor">Doctor</option>
+              <option value="Pharmacist">Pharmacist</option>
+              <option value="LabTechnician">Lab Technician</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </label>
+          <div id="doctorFields">
+            <label class="field"><span class="field-label">Specialization</span><input type="text" id="newSpecialization" placeholder="e.g. Cardiology"></label>
+            <label class="field"><span class="field-label">Bio</span><input type="text" id="newBio"></label>
+            <div style="display:flex;gap:12px;">
+              <label class="field" style="flex:1;"><span class="field-label">Consultation fee (₦)</span><input type="number" id="newFee" step="0.01" value="5000"></label>
+              <label class="field" style="flex:1;"><span class="field-label">Slot length (min)</span><input type="number" id="newSlotDuration" value="30"></label>
+            </div>
+            <label class="field"><span class="field-label">Facility</span><select id="newFacility"><option value="">-</option></select></label>
+          </div>
+          <div id="createUserMessage"></div>
+          <button class="btn" type="submit">Create account</button>
+        </form>
+      </div>
+      <div class="grid-cards" id="userRows"><div class="card muted">Loading…</div></div>
+    </div>
+
+    <div class="tab-panel" id="panel-facilities">
+      <div class="card" style="max-width:480px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M8 10h.01M16 10h.01M8 14h.01M16 14h.01"/></svg></span><h2>Add a facility</h2></div>
+        <form id="facilityForm">
+          <label class="field"><span class="field-label">Name</span><input type="text" id="facName" required></label>
+          <label class="field"><span class="field-label">Address</span><input type="text" id="facAddress"></label>
+          <label class="field"><span class="field-label">Phone</span><input type="tel" id="facPhone" maxlength="11" inputmode="numeric" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)"></label>
+          <button class="btn" type="submit">Add facility</button>
+        </form>
+      </div>
+      <div class="grid-cards" id="facilityRows"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-drugs">
+      <div class="card" style="max-width:480px;margin-bottom:16px;">
+        <div class="card-head"><span class="icon-chip"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg></span><h2>Add to formulary</h2></div>
+        <form id="drugForm">
+          <label class="field"><span class="field-label">Name</span><input type="text" id="drugName" required></label>
+          <div style="display:flex;gap:12px;">
+            <label class="field" style="flex:1;"><span class="field-label">Form</span><input type="text" id="drugForm2" placeholder="tablet, syrup…"></label>
+            <label class="field" style="flex:1;"><span class="field-label">Strength</span><input type="text" id="drugStrength" placeholder="500mg"></label>
+          </div>
+          <button class="btn" type="submit">Add drug</button>
+        </form>
+      </div>
+      <div class="grid-cards" id="drugRows"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-appointments">
+      <div class="card" style="margin-bottom:16px;">
+        <label class="field" style="margin-bottom:0;max-width:320px;">
+          <span class="field-label">Filter by doctor</span>
+          <select id="apptDoctorFilter" onchange="loadAppointments()"><option value="">All doctors</option></select>
+        </label>
+      </div>
+      <div class="grid-cards" id="apptRows"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-complaints">
+      <div class="card" style="margin-bottom:16px;">
+        <label class="field" style="margin-bottom:0;max-width:320px;">
+          <span class="field-label">Filter by status</span>
+          <select id="complaintStatusFilter" onchange="loadComplaints()">
+            <option value="">All</option>
+            <option value="Open">Open</option>
+            <option value="InReview">In review</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid-cards" id="complaintRows"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-payments">
+      <div class="grid-cards" id="paymentRows"></div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>

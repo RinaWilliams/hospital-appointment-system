@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Hospital Appointment System</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="auth-shell">
+    <div class="auth-card" style="max-width:520px;">
+      <a href="../home.html" class="auth-brand" style="text-decoration:none;">
+        <span class="icon-chip">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 3v5a5 5 0 0 0 10 0V3"/><path d="M2 3h3M13 3h3"/><path d="M9 13v2a5 5 0 0 0 10 0v-1"/><circle cx="19" cy="11" r="2.5"/></svg>
+        </span>
+        Hospital Appointment System
+      </a>
+      <h2 style="margin-top:0;">Create a patient account</h2>
+      <div class="page-note">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Doctor, pharmacist, lab technician and admin accounts are created by clinic staff.
+      </div>
+
+      <form id="registerForm" novalidate>
+        <label class="field">
+          <span class="field-label">Full name</span>
+          <input type="text" id="fullName" required autocomplete="name" minlength="3">
+        </label>
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input type="email" id="email" required autocomplete="email">
+        </label>
+        <label class="field">
+          <span class="field-label">Password</span>
+          <input type="password" id="password" required minlength="6" autocomplete="new-password">
+          <div class="muted" style="font-size:11.5px;margin-top:4px;">At least 6 characters.</div>
+        </label>
+        <label class="field">
+          <span class="field-label">Confirm password</span>
+          <input type="password" id="confirmPassword" required minlength="6" autocomplete="new-password">
+        </label>
+        <label class="field">
+          <span class="field-label">Phone (11 digits, numbers only)</span>
+          <input type="tel" id="phone" required
+                 pattern="[0-9]{11}" maxlength="11" inputmode="numeric"
+                 title="Enter exactly 11 digits"
+                 placeholder="e.g. 08012345678"
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)">
+        </label>
+        <div style="display:flex; gap:12px;">
+          <label class="field" style="flex:1;">
+            <span class="field-label">Date of birth</span>
+            <input type="date" id="dob" required onchange="handleDobChange()">
+          </label>
+          <label class="field" style="flex:1;">
+            <span class="field-label">Gender</span>
+            <select id="gender">
+              <option value="">-</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span class="field-label">Address</span>
+          <input type="text" id="address" autocomplete="street-address">
+        </label>
+
+        <div id="minorSection" style="display:none; border:1.5px solid var(--primary-tint-strong); background:var(--primary-tint); border-radius:12px; padding:16px 18px; margin:6px 0 16px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;color:var(--primary-700);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+            <strong style="color:var(--primary-800);font-size:14px;">Under-18 registration</strong>
+          </div>
+          <div class="muted" style="font-size:12px;margin-bottom:14px;">
+            Because you are under 18, we need a parent or guardian's details, and we must verify your identity with your NIN.
+          </div>
+
+          <label class="field">
+            <span class="field-label">Guardian full name</span>
+            <input type="text" id="guardianName">
+          </label>
+          <label class="field">
+            <span class="field-label">Guardian phone (11 digits)</span>
+            <input type="tel" id="guardianPhone"
+                   pattern="[0-9]{11}" maxlength="11" inputmode="numeric"
+                   placeholder="e.g. 08012345678"
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)">
+          </label>
+          <label class="field">
+            <span class="field-label">Guardian email</span>
+            <input type="email" id="guardianEmail">
+          </label>
+          <label class="field">
+            <span class="field-label">Relationship to you</span>
+            <select id="guardianRelationship">
+              <option value="">-</option>
+              <option value="Parent">Parent</option>
+              <option value="Legal Guardian">Legal Guardian</option>
+              <option value="Sibling (adult)">Sibling (adult)</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Your NIN (11 digits)</span>
+            <div style="display:flex;gap:8px;">
+              <input type="tel" id="nin" maxlength="11" inputmode="numeric"
+                     placeholder="e.g. 12345678901"
+                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)">
+              <button type="button" class="btn btn-ghost" id="verifyNinBtn" style="white-space:nowrap;">Verify NIN</button>
+            </div>
+            <div id="ninStatus" style="font-size:12.5px;margin-top:6px;"></div>
+          </label>
+
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink-soft);margin-top:10px;">
+            <input type="checkbox" id="guardianConsent" style="width:auto;margin-top:3px;">
+            <span>I confirm my parent or guardian knows about this registration and consents to my treatment.</span>
+          </label>
+        </div>
+
+        <div class="error-text" id="errorMsg" style="display:none;"></div>
+        <div class="success-text" id="successMsg" style="display:none;"></div>
+
+        <button type="submit" class="btn" id="registerBtn" style="width:100%; justify-content:center;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+          Create account
+        </button>
+      </form>
+
+      <div class="muted" style="text-align:center; margin-top:16px; font-size:13px;">
+        Already have an account? <a href="../index.html" style="color:var(--primary-700); font-weight:600;">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    let ninVerified = false;
+    let isMinor = false;
+
+    function calcAge(dobStr) {
+      if (!dobStr) return null;
+      const dob = new Date(dobStr);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      return age;
+    }
+
+    function handleDobChange() {
+      const dob = document.getElementById('dob').value;
+      const age = calcAge(dob);
+      const section = document.getElementById('minorSection');
+      if (age !== null && age < 18 && age >= 0) {
+        section.style.display = 'block';
+        isMinor = true;
+      } else {
+        section.style.display = 'none';
+        isMinor = false;
+        ninVerified = false;
+        document.getElementById('ninStatus').textContent = '';
+      }
+    }
+
+    document.getElementById('verifyNinBtn').addEventListener('click', async () => {
+      const nin = document.getElementById('nin').value.trim();
+      const status = document.getElementById('ninStatus');
+      if (!/^\d{11}$/.test(nin)) {
+        status.style.color = 'var(--red)';
+        status.textContent = 'NIN must be exactly 11 digits.';
+        ninVerified = false;
+        return;
+      }
+      status.style.color = 'var(--muted)';
+      status.textContent = 'Verifying…';
+      await new Promise(r => setTimeout(r, 700));
+      if (nin.startsWith('000')) {
+        status.style.color = 'var(--red)';
+        status.textContent = 'NIN could not be verified. Please check the number and try again.';
+        ninVerified = false;
+      } else {
+        status.style.color = 'var(--primary-700)';
+        status.textContent = '✓ NIN verified successfully.';
+        ninVerified = true;
+      }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorBox = document.getElementById('errorMsg');
+      const successBox = document.getElementById('successMsg');
+      errorBox.style.display = 'none';
+      successBox.style.display = 'none';
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const phone = document.getElementById('phone').value.trim();
+      const dob = document.getElementById('dob').value;
+      const gender = document.getElementById('gender').value;
+      const address = document.getElementById('address').value.trim();
+
+      if (!fullName) return showError('Please enter your full name.');
+      if (fullName.length < 3) return showError('Full name must be at least 3 characters.');
+      if (!email) return showError('Please enter your email address.');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('That email address looks invalid. Please check it.');
+      if (!password) return showError('Please choose a password.');
+      if (password.length < 6) return showError('Password must be at least 6 characters long.');
+      if (password !== confirmPassword) return showError('The two passwords do not match.');
+      if (!phone) return showError('Please enter your phone number.');
+      if (!/^\d{11}$/.test(phone)) return showError('Phone number must be exactly 11 digits, numbers only.');
+      if (!dob) return showError('Please enter your date of birth.');
+      const age = calcAge(dob);
+      if (age === null || age < 0) return showError('That date of birth looks invalid.');
+      if (age > 120) return showError('Please enter a valid date of birth.');
+
+      let payload = { fullName, email, password, phone, dateOfBirth: dob, gender: gender || null, address };
+
+      if (isMinor) {
+        const gName = document.getElementById('guardianName').value.trim();
+        const gPhone = document.getElementById('guardianPhone').value.trim();
+        const gEmail = document.getElementById('guardianEmail').value.trim();
+        const gRel = document.getElementById('guardianRelationship').value;
+        const gConsent = document.getElementById('guardianConsent').checked;
+
+        if (!gName) return showError('Please enter your guardian\'s full name.');
+        if (gName.length < 3) return showError('Guardian name must be at least 3 characters.');
+        if (!gPhone) return showError('Please enter your guardian\'s phone number.');
+        if (!/^\d{11}$/.test(gPhone)) return showError('Guardian phone must be exactly 11 digits, numbers only.');
+        if (!gEmail) return showError('Please enter your guardian\'s email address.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(gEmail)) return showError('Guardian email address looks invalid.');
+        if (!gRel) return showError('Please select your relationship to the guardian.');
+        if (!ninVerified) return showError('Please verify your NIN before submitting.');
+        if (!gConsent) return showError('Please tick the guardian consent checkbox.');
+
+        payload.guardianName = gName;
+        payload.guardianPhone = gPhone;
+        payload.guardianEmail = gEmail;
+        payload.guardianRelationship = gRel;
+        payload.guardianConsent = true;
+        payload.nin = document.getElementById('nin').value.trim();
+        payload.ninVerified = true;
+        payload.isMinor = true;
+      }
+
+      try {
+        document.getElementById('registerBtn').disabled = true;
+        const auth = await apiRequest('/auth/register', { method: 'POST', auth: false, body: payload });
+
+        successBox.innerHTML = `Account created. We've sent a confirmation link to <b>${escapeHtml(email)}</b>. Please check your inbox (and spam folder) to activate your account.`;
+        successBox.style.display = 'block';
+        errorBox.style.display = 'none';
+
+        setTimeout(() => {
+          Session.save(auth);
+          window.location.href = 'dashboard-patient.html';
+        }, 2200);
+      } catch (err) {
+        showError(err.message || 'Registration failed. Please try again.');
+        document.getElementById('registerBtn').disabled = false;
+      }
+    });
+
+    function showError(msg) {
+      const box = document.getElementById('errorMsg');
+      box.textContent = msg;
+      box.style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  </script>
+</body>
+</html>
